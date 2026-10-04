@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Pokemon haku</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+  <!-- Oma CSS -->
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+  <!-- Navigaatio -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">Camilla</a>
+
+      <div class="navbar-nav">
+        <a class="nav-link" href="../index.html">Portfolio</a>
+        <a class="nav-link" href="index.html">JSON</a>
+        <a class="nav-link" href="toteutus.html">Toteutus</a>
+        <a class="nav-link active" href="poke.html">Pokemon haku</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <main class="container my-5">
+
+    <h1>Pokemon haku</h1>
+
+    <p>
+      <input type="text"
+             id="pokemonName"
+             placeholder="Enter Pokemon name">
+
+      <button onclick="poke()">Hae</button>
+
+      <div id="nimi">Kirjoita laatikkoon Pokemonin nimi</div>
+
+      <p id="kuva2"></p>
+    </p>
+
+  </main>
+
+
+  <script>
+
+    // Funktio suoritetaan, kun Hae-painiketta painetaan
+    function poke() {
+
+      // Tallennetaan annettu Pokemonin nimi
+      // ja muutetaan se pieniksi kirjaimiksi
+      const pokeName =
+        document.getElementById("pokemonName").value.toLowerCase();
+
+      // Tallennetaan nimi myös näytettäväksi sivulle
+      let name =
+        document.getElementById("pokemonName").value;
+
+
+      // Haetaan Pokemonin tiedot PokeAPIsta
+      fetch(`https://pokeapi.co/api/v2/pokemon/${pokeName}`)
+
+        // Muunnetaan vastaus JSON-muotoon
+        .then(function (response) {
+          return response.json();
+        })
+
+        // Käsitellään JSON-vastaus
+        .then(function (responseJson) {
+          pokekuva(responseJson, name);
+        })
+
+        // Jos haussa tulee virhe
+        .catch(function (error) {
+          document.getElementById("nimi").innerHTML =
+            "Tietoa ei pystytä hakemaan";
+
+          document.getElementById("kuva2").innerHTML = "";
+        });
+    }
+
+
+    // Näytetään Pokemonin nimi ja kuva
+    function pokekuva(obj, name) {
+
+      // Haetaan Pokemonin etukuva
+      let pokeurl = obj.sprites.front_default;
+
+      // Kirjoitetaan kuva sivulle
+      document.getElementById("kuva2").innerHTML =
+        "<img src='" + pokeurl + "' alt='Pokemon'>";
+
+      // Kirjoitetaan Pokemonin nimi sivulle
+      document.getElementById("nimi").innerHTML =
+        "<b>" + name + "</b>";
+
+      // Tyhjennetään hakukenttä
+      document.getElementById("pokemonName").value = "";
+    }
+
+  </script>
+
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
