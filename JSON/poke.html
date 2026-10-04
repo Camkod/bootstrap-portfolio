@@ -46,12 +46,17 @@
       <div id="nimi">Kirjoita laatikkoon Pokemonin nimi</div>
 
       <p id="kuva2"></p>
+    
+    <div id="kaanna"></div>
+<div id="ominaisuudet"></div>
+    
     </p>
 
   </main>
 
 
   <script>
+    let pokemonData;
 
     // Funktio suoritetaan, kun Hae-painiketta painetaan
     function poke() {
@@ -80,33 +85,61 @@
         })
 
         // Jos haussa tulee virhe
-        .catch(function (error) {
-          document.getElementById("nimi").innerHTML =
-            "Tietoa ei pystytä hakemaan";
+       .catch(function (error) {
+  document.getElementById("nimi").innerHTML =
+    "Tietoa ei pystytä hakemaan";
 
-          document.getElementById("kuva2").innerHTML = "";
-        });
+  document.getElementById("kuva2").innerHTML = "";
+  document.getElementById("kaanna").innerHTML = "";
+  document.getElementById("ominaisuudet").innerHTML = "";
+  document.getElementById("pokemonName").value = "";
+});
     }
 
 
     // Näytetään Pokemonin nimi ja kuva
-    function pokekuva(obj, name) {
+  function pokekuva(obj, name) {
 
-      // Haetaan Pokemonin etukuva
-      let pokeurl = obj.sprites.front_default;
+  // Haetaan Pokemonin etukuva
+  let pokeurl = obj.sprites.front_default;
 
-      // Kirjoitetaan kuva sivulle
-      document.getElementById("kuva2").innerHTML =
-        "<img src='" + pokeurl + "' alt='Pokemon'>";
+  // Kirjoitetaan kuva sivulle
+  document.getElementById("kuva2").innerHTML =
+    "<img src='" + pokeurl + "' alt='Pokemon'>";
 
-      // Kirjoitetaan Pokemonin nimi sivulle
-      document.getElementById("nimi").innerHTML =
-        "<b>" + name + "</b>";
+  // Kirjoitetaan Pokemonin nimi sivulle
+  document.getElementById("nimi").innerHTML =
+    "<b>" + name + "</b>";
 
-      // Tyhjennetään hakukenttä
-      document.getElementById("pokemonName").value = "";
-    }
+  // Lisätään Käännä-painike vasta onnistuneen haun jälkeen
+  document.getElementById("kaanna").innerHTML =
+    "<button onclick='kaanna()'>Käännä</button>";
 
+  // Tallennetaan Pokemonin tiedot myöhempää käyttöä varten
+  pokemonData = obj;
+
+  // Tyhjennetään mahdolliset vanhat ominaisuudet
+  document.getElementById("ominaisuudet").innerHTML = "";
+
+  // Tyhjennetään hakukenttä
+  document.getElementById("pokemonName").value = "";
+}
+function kaanna() {
+
+  // Haetaan Pokemonin selkäpuolen kuva
+  let takakuva = pokemonData.sprites.back_default;
+
+  // Vaihdetaan etukuva selkäpuolen kuvaksi
+  document.getElementById("kuva2").innerHTML =
+    "<img src='" + takakuva + "' alt='Pokemon selin'>";
+
+  // Näytetään kolme muuta ominaisuutta
+  document.getElementById("ominaisuudet").innerHTML =
+    "<h3>Pokemonin tiedot</h3>" +
+    "Pituus: " + pokemonData.height + "<br>" +
+    "Paino: " + pokemonData.weight + "<br>" +
+    "Kokemuspisteet: " + pokemonData.base_experience;
+}
   </script>
 
 
