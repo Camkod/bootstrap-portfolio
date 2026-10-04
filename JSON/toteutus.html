@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Digitekniikat</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+  <!-- Portfolion oma CSS -->
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+  <!-- Navigaatio -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">Camilla</a>
+
+      <div class="navbar-nav">
+        <a class="nav-link" href="../index.html">Portfolio</a>
+        <a class="nav-link" href="index.html">JSON</a>
+        <a class="nav-link active" href="toteutus.html">Toteutus</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-5">
+
+    <!-- JSON-tiedot tulevat tähän -->
+    <div id="vastaus"></div>
+
+  </main>
+
+  <script>
+
+    // Haetaan tiedot toteutus.JSON-tiedostosta
+    fetch('toteutus.JSON')
+
+    // Muutetaan vastaus JavaScript-olioksi
+    .then(function(response) {
+      return response.json();
+    })
+
+    // Lähetetään tiedot kerro-funktiolle
+    .then(function(responseJson) {
+      kerro(responseJson);
+    })
+
+    // Virheilmoitus, jos tietoja ei pystytä hakemaan
+    .catch(function(error) {
+      document.getElementById("vastaus").innerHTML =
+        "<p>Tietoa ei pystytä hakemaan</p>";
+    });
+
+
+    function kerro(obj) {
+
+      let tiedot =
+        "<h1>" + obj.nimi + "</h1>" +
+
+        "<p>" + obj.osallistujamaara + " kpl</p>" +
+
+        "<p>" + obj.osallistujat.join(" ") + "</p>" +
+
+        "<p>" + obj.alkamisaika +
+        " - " + obj.loppumisaika + "</p>" +
+
+        "<p>" + obj.kesto + "</p>" +
+
+        "<img src='" + obj.kuva +
+        "' class='img-fluid' alt='Digitekniikat'>";
+
+      document.getElementById("vastaus").innerHTML = tiedot;
+    }
+
+  </script>
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
