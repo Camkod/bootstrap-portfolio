@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Sää Helsingissä</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+  <!-- Oma CSS -->
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+  <!-- Navigaatio -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="../index.html">Camilla</a>
+
+      <div class="navbar-nav">
+        <a class="nav-link" href="../index.html">Portfolio</a>
+        <a class="nav-link" href="index.html">JSON</a>
+        <a class="nav-link" href="toteutus.html">Toteutus</a>
+        <a class="nav-link" href="poke.html">Pokemon haku</a>
+        <a class="nav-link active" href="saa.html">Sää</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <main class="container my-5">
+
+    <h1>Sää Helsingissä</h1>
+
+    <p id="aika"></p>
+
+    <div id="vastaus">
+      <p>Säätietoja haetaan...</p>
+    </div>
+
+  </main>
+
+
+  <script>
+
+    // Näytetään kellonaika, jolloin sivu ladattiin
+    let nyt = new Date();
+
+    document.getElementById("aika").innerHTML =
+      "Sää kello " +
+      nyt.getHours() + ":" +
+      String(nyt.getMinutes()).padStart(2, "0");
+
+
+    // Haetaan Helsingin sää OpenWeather-palvelusta
+    fetch("https://api.openweathermap.org/data/2.5/weather?id=658225&appid=665ecd56dfc08dbb50feb8b8f5034e28&lang=fi&units=metric")
+
+      // Muutetaan vastaus JSON-muotoon
+      .then(function(response) {
+        return response.json();
+      })
+
+      // Käsitellään JSON-vastaus
+      .then(function(responseJson) {
+        saa(responseJson);
+      })
+
+      // Jos haussa tulee virhe
+      .catch(function(error) {
+        document.getElementById("vastaus").innerHTML =
+          "<p>Tietoa ei pystytä hakemaan</p>";
+      });
+
+
+    // Funktio säätietojen näyttämiseen
+    function saa(obj) {
+
+      let teksti = "";
+
+      teksti += "<h3>Sää:</h3>";
+      teksti += "<p>" + obj.weather[0].description + "</p>";
+
+      teksti += "<h3>Lämpötila:</h3>";
+      teksti += "<p>" + obj.main.temp + " °C</p>";
+
+      teksti += "<h3>Tuuli:</h3>";
+      teksti += "<p>" + obj.wind.speed + " m/s</p>";
+
+      // OpenWeather-sääkuvake
+      let kuvake = obj.weather[0].icon;
+
+      teksti +=
+        "<img src='https://openweathermap.org/img/wn/" +
+        kuvake +
+        "@2x.png' alt='Sääkuvake'>";
+
+      document.getElementById("vastaus").innerHTML = teksti;
+    }
+
+  </script>
+
+
+  <!-- Bootstrap JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
