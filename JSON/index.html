@@ -55,6 +55,71 @@
     <div id="vastaus"></div>
 
   </main>
+  <script>
+
+// Haetaan oma JSON-tietue
+fetch('tietue.JSON')
+
+// Muunnetaan vastaus JS olio muotoon
+.then(function (response) {
+    return response.json();
+})
+
+// Käsitellään muunnettu JSON-vastaus
+// ja kutsutaan funktiota kerro()
+.then(function (responseJson) {
+    kerro(responseJson);
+})
+
+// Jos hakemisessa tuli jokin virhe
+.catch(function (error) {
+    document.getElementById("vastaus").innerHTML =
+        "<p>Tietoa ei pystytä hakemaan</p>";
+});
+
+
+// Määritellään kerro-funktio
+function kerro(obj) {
+
+    // Haetaan JSON-tiedostosta otsikko ja kuvaus
+    let tiedot =
+        "<h1>" + obj.otsikko + "</h1><br>" +
+        obj.kuvaus +
+        "<br><hr>";
+
+    // Lisätään kuva
+    tiedot +=
+        "<p><img src='" + obj.kuva +
+        "' class='img-fluid' alt='Opintojakson kuva'></p>";
+
+    // Lisätään opintojakson tiedot
+    tiedot +=
+        "<h3>Opintojakso</h3>" +
+        "Nimi: " + obj.opintojakso.nimi + "<br>" +
+        "Tunnus: " + obj.opintojakso.tunnus + "<br>" +
+        "Opintopisteet: " + obj.opintojakso.opintopisteet + "<br>";
+
+    // Lisätään Aiheet-otsikko
+    tiedot += "<p><h3>Aiheet</h3>";
+
+    // Haetaan tekniikat-taulukon tiedot
+    for (var i = 0; i < obj.tekniikat.length; i++) {
+
+        tiedot +=
+            "<b>Aihe: " + obj.tekniikat[i].aihe + "</b> ";
+
+        tiedot +=
+            "<a href='" + obj.tekniikat[i].linkki +
+            "'>" + obj.tekniikat[i].linkki + "</a><br>";
+    }
+
+    // Suljetaan kappale ja kirjoitetaan tiedot sivulle
+    tiedot += "</p>";
+
+    document.getElementById("vastaus").innerHTML = tiedot;
+}
+
+</script>
 
 
   <!-- Bootstrap JavaScript -->
